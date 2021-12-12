@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user,except: [:create, :index]
+  before_action :authenticate_user,except: [:create]
+  #after_action :verify_authorized, except: :create
 
   def create
     @user = User.new(user_params)
@@ -12,6 +13,7 @@ class UsersController < ApplicationController
 
   def index
     users = User.all
+    authorize current_user
     render json: {users: users, current_user: current_user}
   end
 

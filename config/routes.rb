@@ -7,6 +7,6 @@ Rails.application.routes.draw do
     post '/signup', to: 'users#create'
    end
 
-   resources :users, only: [:index]
+   resources :users, only: [:index, :update, :destroy, :edit]
 
 end

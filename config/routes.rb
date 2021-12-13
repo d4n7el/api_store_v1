@@ -5,8 +5,17 @@ Rails.application.routes.draw do
   scope '/auth' do
     post '/signin', to: 'user_token#create'
     post '/signup', to: 'users#create'
-   end
+  end
 
-   resources :users, only: [:index, :update, :destroy, :edit]
+  namespace :admin do
+    resources :users, only: [:index, :destroy, :update, :edit]
+    resources :stores, only: [:create, :index, :edit, :update, :destroy]
+  end
+
+  namespace :owner do
+    resources :stores, only: [:edit, :update, :index]
+  end
+
+  resource :users, only: [ :update, :edit]
 
 end

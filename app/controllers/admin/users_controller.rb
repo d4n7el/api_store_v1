@@ -1,6 +1,6 @@
 class Admin::UsersController < ApplicationController
   before_action :authenticate_user,except: [:create]
-  before_action :only_admin, only: [:index, :update, :destroy]
+  before_action :is_admin?, only: [:update, :index, :create, :edit, :destroy]
 
   def index
     users = User.all
@@ -9,7 +9,6 @@ class Admin::UsersController < ApplicationController
 
   def update
     user = User.find(params[:id])
-    authorize user
     if user&.update(user_params)
       render json: user
     else
@@ -28,7 +27,6 @@ class Admin::UsersController < ApplicationController
 
   def edit 
     user = User.find(params[:id])
-    authorize user
     if user
       render json: user, status: :ok
     else
@@ -43,10 +41,6 @@ class Admin::UsersController < ApplicationController
   private 
 
   def user_params
-    params.permit(:username, :email, :password, :password_confirmation, :admin, :owner, :customer, :seller )
-  end
-
-  def only_admin
-    authorize current_user
+    params.permit(:username, :email, :password, :password_confirmation, :role )
   end
 end

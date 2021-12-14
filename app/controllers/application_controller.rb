@@ -1,11 +1,16 @@
 class ApplicationController < ActionController::API
   include Knock::Authenticable
-  include Pundit
 
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-
-  def user_not_authorized
-    render json: {error: 'You are not authorized to perform this action.', status: :unauthorized}
-    head(:unauthorized)
+  def is_admin?
+    render status: :unauthorized and return unless current_user.admin?
   end
+
+  def is_owner?
+    render status: :unauthorized and return unless current_user.owner?
+  end
+
+  def owns_the_record? (record)
+    render status: :unauthorized and return unless current_user.id === record.user_id
+  end
+
 end

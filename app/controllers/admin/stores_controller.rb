@@ -32,7 +32,7 @@ class Admin::StoresController < ApplicationController
   private
 
   def store_params
-    params.permit(:name, :address, :description, :user_id)
+    params.permit(:name, :address, :description, :user_id, :status)
   end
 
   def set_store 

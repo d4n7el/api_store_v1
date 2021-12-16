@@ -9,8 +9,13 @@ class ApplicationController < ActionController::API
     render status: :unauthorized and return unless current_user.owner?
   end
 
-  def owns_the_record? (record)
+  def owns_the_record (record)
     render status: :unauthorized and return unless current_user.id === record.user_id
+  end
+
+  def permit_update_category? (record)
+    validation = current_user.store_id === record.store_id and current_user.owner? || current_user.admin?
+    render status: :unauthorized and return unless validation
   end
 
 end

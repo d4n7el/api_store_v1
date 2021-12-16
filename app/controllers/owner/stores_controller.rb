@@ -2,10 +2,10 @@ class Owner::StoresController < ApplicationController
   before_action :authenticate_user,except: [ :create ]
   before_action :set_store, only: [ :update, :edit ]
   before_action :is_owner?, only: [:update, :index, :edit]
-  before_action :validate_owns_the_record?, only: [:update]
+  before_action :validate_the_record, only: [:update, :edit]
 
   def index 
-    stores = current_user.stores.limit(20).offset(params[:offset] || 0)
+    stores = Store.where(user_id: current_user)
     render json: stores, status: :ok
   end
 
@@ -24,15 +24,15 @@ class Owner::StoresController < ApplicationController
   private 
 
   def store_params
-    params.permit(:name, :address, :description, :user_id, :id)
+    params.permit(:name, :address, :description, :status)
   end
 
   def set_store 
     @store = Store.find(params[:id])
   end
 
-  def validate_owns_the_record?
-    owns_the_record?(@store)
+  def validate_the_record
+    owns_the_record(@store)
   end
 
 end

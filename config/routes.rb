@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :users, only: [:index, :destroy, :update, :edit]
     resources :stores, only: [:create, :index, :edit, :update, :destroy]
+    resources :categories, only: [:edit, :update, :index, :create, :destroy]
   end
 
   namespace :owner do

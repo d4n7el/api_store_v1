@@ -5,12 +5,8 @@ class Owner::CategoriesController < ApplicationController
   before_action :validate_permit_update_category, only: [:update, :edit, :destroy]
 
   def index
-    if params[:store_id]
-      categories =  Category.where(store_id: params[:store_id]) 
-      render json: {categories: categories, current:  current_user}
-    else
-      render status: :bad_request
-    end
+    categories = params[:store_id] ? Category.where(store_id: params[:store_id]) : User.find(current_user.id).categories
+    render json: {categories: categories, current:  current_user}
   end
 
   def create
@@ -49,7 +45,7 @@ class Owner::CategoriesController < ApplicationController
   end
 
   def validate_permit_update_category
-    permit_update_category?(@category)
+    permit_update_category?(@category) unless current_user.admin?
   end
 
 end

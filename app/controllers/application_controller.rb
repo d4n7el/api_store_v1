@@ -18,4 +18,9 @@ class ApplicationController < ActionController::API
     render status: :unauthorized and return unless validation
   end
 
+  def permit_create_product?
+    validation = !current_user.admin? || !current_user.owner?
+    render status: :unauthorized and return unless validation
+  end
+
 end
